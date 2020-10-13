@@ -1,0 +1,14 @@
+{
+    "extends": "stylelint-config-standard",
+    "rules": {
+        "indentation": "tab",
+        "at-rule-no-unknown": [
+            true,
+            {
+                "ignoreAtRules": ["/@*mixin/", "ignores"]
+            }
+        ],
+        "declaration-colon-newline-after": null,
+        "no-eol-whitespace": null
+    }
+}
