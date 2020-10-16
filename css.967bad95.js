@@ -189,7 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel/src/builtins/css-loader.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../assets/img/menu-1.png":[["menu-1.0d47fab0.png","assets/img/menu-1.png"],"assets/img/menu-1.png"],"./../assets/img/menu-2.png":[["menu-2.0e858f56.png","assets/img/menu-2.png"],"assets/img/menu-2.png"],"./../assets/img/menu-3.png":[["menu-3.6bc793c3.png","assets/img/menu-3.png"],"assets/img/menu-3.png"],"./../assets/img/menu-4.png":[["menu-4.869ef115.png","assets/img/menu-4.png"],"assets/img/menu-4.png"],"./../assets/img/menu-5.png":[["menu-5.e3097eab.png","assets/img/menu-5.png"],"assets/img/menu-5.png"],"_css_loader":"../node_modules/parcel/src/builtins/css-loader.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -217,7 +217,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44237" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45385" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

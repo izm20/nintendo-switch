@@ -117,116 +117,269 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"js/index.js":[function(require,module,exports) {
-var leftJoystick = document.querySelector('.left-joycon .joystick');
-var rightJoystick = document.querySelector('.right-joycon .joystick');
-var CIR_OFFSET_X = 35.5;
-var CIR_OFFSET_Y = 40;
-var leftJoy = {
-  x: leftJoystick.getBoundingClientRect().left + CIR_OFFSET_X,
-  y: leftJoystick.getBoundingClientRect().top + CIR_OFFSET_Y
-};
-var LEFT_ORIGIN_JOY = leftJoy;
-var rightJoy = {
-  x: rightJoystick.getBoundingClientRect().left + CIR_OFFSET_X,
-  y: rightJoystick.getBoundingClientRect().top + CIR_OFFSET_Y
-};
-var RIGHT_ORIGIN_JOY = rightJoy;
+})({"js/Joystick.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Joystick = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Joystick = /*#__PURE__*/function () {
+  function Joystick(element) {
+    _classCallCheck(this, Joystick);
+
+    this.element = element;
+    this.CIR_OFFSET_X = 23;
+    this.CIR_OFFSET_Y = 25;
+    this.RANGE = 2;
+    this.ROTATE_RANGE = 2.5;
+    this.joyCoordinates = {
+      x: this.element.getBoundingClientRect().left + this.CIR_OFFSET_X,
+      y: this.element.getBoundingClientRect().top + this.CIR_OFFSET_Y
+    };
+    this.ORIGIN_JOY_COORDINATES = this.joyCoordinates;
+    this.isActive = false;
+    this.countLeft = 0;
+    this.countRight = 0;
+  }
+
+  _createClass(Joystick, [{
+    key: "update",
+    value: function update(mouse, self, screen, moveScreen) {
+      if (self.isActive) {
+        var offsetX = (self.joyCoordinates.x - mouse.x) / -self.RANGE;
+        var offsetY = (self.joyCoordinates.y - mouse.y) / -self.RANGE;
+        var rotateY = offsetX * self.ROTATE_RANGE;
+        var rotateX = offsetY * -self.ROTATE_RANGE;
+        console.log(offsetX, offsetY);
+        self.element.style.transform = "translateX(".concat(offsetX, "px) translateY(").concat(offsetY, "px) rotateY(").concat(rotateY, "deg) rotateX(").concat(rotateX, "deg) perspective(5000rem)");
+        self.updateCoordinates(self);
+
+        if (offsetX >= 5) {
+          if (self.countRight >= 20) {
+            moveScreen.right(screen);
+            self.countRight = 0;
+          }
+
+          self.countRight++;
+        } else if (offsetX <= -6) {
+          if (self.countLeft >= 20) {
+            moveScreen.left(screen);
+            self.countLeft = 0;
+          }
+
+          self.countLeft++;
+        }
+      } else {
+        self.element.style.transform = '';
+        self.joyCoordinates.x = self.ORIGIN_JOY_COORDINATES.x;
+        self.joyCoordinates.y = self.ORIGIN_JOY_COORDINATES.y;
+        self.countLeft = 0;
+        self.countRight = 0;
+      }
+    }
+  }, {
+    key: "updateCoordinates",
+    value: function updateCoordinates(self) {
+      self.joyCoordinates.x = self.element.getBoundingClientRect().left + self.CIR_OFFSET_X;
+      self.joyCoordinates.y = self.element.getBoundingClientRect().top + self.CIR_OFFSET_Y;
+    }
+  }]);
+
+  return Joystick;
+}();
+
+exports.Joystick = Joystick;
+},{}],"assets/video/Mario.mp4":[function(require,module,exports) {
+module.exports = "/Mario.adde6a2d.mp4";
+},{}],"assets/video/Zelda.mp4":[function(require,module,exports) {
+module.exports = "/Zelda.67125ac1.mp4";
+},{}],"assets/video/1-2.mp4":[function(require,module,exports) {
+module.exports = "/1-2.3b9baeae.mp4";
+},{}],"assets/video/Arms.mp4":[function(require,module,exports) {
+module.exports = "/Arms.39c39c31.mp4";
+},{}],"assets/video/Snipperclip.mp4":[function(require,module,exports) {
+module.exports = "/Snipperclip.7677fb14.mp4";
+},{}],"js/index.js":[function(require,module,exports) {
+"use strict";
+
+var _Joystick = require("./Joystick");
+
+var _Mario = _interopRequireDefault(require("../assets/video/Mario.mp4"));
+
+var _Zelda = _interopRequireDefault(require("../assets/video/Zelda.mp4"));
+
+var _ = _interopRequireDefault(require("../assets/video/1-2.mp4"));
+
+var _Arms = _interopRequireDefault(require("../assets/video/Arms.mp4"));
+
+var _Snipperclip = _interopRequireDefault(require("../assets/video/Snipperclip.mp4"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var leftJoystick = new _Joystick.Joystick(document.querySelector('.left-joycon .joystick'));
+var rightJoystick = new _Joystick.Joystick(document.querySelector('.right-joycon .joystick'));
+addEvents(leftJoystick, mouseMove);
+addEvents(rightJoystick, mouseMove);
+var btnHome = document.querySelector('.right-joycon .button-home');
+var btnA = document.querySelector('.right-joycon .button-right');
+var btnB = document.querySelector('.right-joycon .button-down');
+var screen = document.querySelector('.screen');
+var video = document.querySelector('.video');
 var mouse = {
   x: 0,
   y: 0
 };
-var thumb = false;
 
-var mouseMove = function mouseMove(e, update) {
+function mouseMove(e, joystick) {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
-  requestAnimationFrame(update);
-};
-
-var addMouseMove = function addMouseMove() {
-  thumb = true;
-  leftJoystick.addEventListener('mousemove', function (e) {
-    return mouseMove(e, updateLeft);
+  requestAnimationFrame(function () {
+    return joystick.update(mouse, joystick, screen, {
+      right: moveRight,
+      left: moveLeft
+    });
   });
-  rightJoystick.addEventListener('mousemove', function (e) {
-    return mouseMove(e, updateRight);
-  });
-};
-
-leftJoystick.addEventListener('mousedown', addMouseMove);
-rightJoystick.addEventListener('mousedown', addMouseMove);
-leftJoystick.addEventListener('mouseup', function () {
-  thumb = false;
-  leftJoystick.removeEventListener('mousemove', function (e) {
-    return mouseMove(e, updateLeft);
-  });
-  requestAnimationFrame(updateLeft);
-});
-rightJoystick.addEventListener('mouseup', function () {
-  thumb = false;
-  rightJoystick.removeEventListener('mousemove', function (e) {
-    return mouseMove(e, updateRight);
-  });
-  requestAnimationFrame(updateRight);
-});
-leftJoystick.addEventListener('mouseout', function () {
-  thumb = false;
-  leftJoystick.removeEventListener('mousemove', function (e) {
-    return mouseMove(e, updateLeft);
-  });
-  requestAnimationFrame(updateLeft);
-});
-rightJoystick.addEventListener('mouseout', function () {
-  thumb = false;
-  rightJoystick.removeEventListener('mousemove', function (e) {
-    return mouseMove(e, updateRight);
-  });
-  requestAnimationFrame(updateRight);
-});
-
-function updateJoy() {
-  leftJoy.x = leftJoystick.getBoundingClientRect().left + CIR_OFFSET_X;
-  leftJoy.y = leftJoystick.getBoundingClientRect().top + CIR_OFFSET_Y;
-  rightJoy.x = rightJoystick.getBoundingClientRect().left + CIR_OFFSET_X;
-  rightJoy.y = rightJoystick.getBoundingClientRect().top + CIR_OFFSET_Y;
 }
 
-var RANGE = 2;
-var ROTATE_RANGE = 2.5;
+;
 
-function updateLeft() {
-  if (thumb) {
-    var offsetX = (leftJoy.x - mouse.x) / -RANGE;
-    var offsetY = (leftJoy.y - mouse.y) / -RANGE;
-    var rotateY = offsetX * ROTATE_RANGE;
-    var rotateX = offsetY * -ROTATE_RANGE;
-    console.log('y:', rotateX, 'x:', rotateY);
-    leftJoystick.style.transform = "translateX(".concat(offsetX, "px) translateY(").concat(offsetY, "px) rotateY(").concat(rotateY, "deg) rotateX(").concat(rotateX, "deg) perspective(5000rem)");
-    updateJoy();
-  } else {
-    leftJoystick.style.transform = '';
-    leftJoy.x = LEFT_ORIGIN_JOY.x;
-    leftJoy.y = LEFT_ORIGIN_JOY.y;
+function addMouseMove(mouseMove, joystick) {
+  joystick.isActive = true;
+  joystick.element.addEventListener('mousemove', function (e) {
+    mouseMove(e, joystick);
+  });
+}
+
+;
+
+function addEvents(joystick, mouseMove) {
+  joystick.element.addEventListener('mousedown', function () {
+    return addMouseMove(mouseMove, joystick);
+  });
+  removeEvents(mouseMove, joystick);
+}
+
+function removeEvents(mouseMove, joystick) {
+  joystick.element.addEventListener('mouseup', function () {
+    return removeMouseMove(mouseMove, joystick);
+  });
+  joystick.element.addEventListener('mouseout', function () {
+    return removeMouseMove(mouseMove, joystick);
+  });
+}
+
+function removeMouseMove(mouseMove, joystick) {
+  joystick.isActive = false;
+  joystick.element.removeEventListener('mousemove', function (e) {
+    mouseMove(e, joystick);
+  });
+  requestAnimationFrame(function () {
+    return joystick.update(mouse, joystick);
+  });
+}
+
+btnHome.addEventListener('click', function (e) {
+  video.pause();
+  video.src = '';
+  screen.classList.toggle('opacity');
+  screen.classList.remove('menu-2', 'menu-3', 'menu-4', 'menu-5');
+});
+var rightArrow = document.querySelector('.left-joycon .button-arrow-right');
+rightArrow.addEventListener('click', function (e) {
+  moveRight(screen);
+});
+var leftArrow = document.querySelector('.left-joycon .button-arrow-left');
+leftArrow.addEventListener('click', function (e) {
+  moveLeft(screen);
+});
+
+function moveRight(screen) {
+  if (screen.classList.contains('opacity')) {
+    if (!screen.classList.contains('menu-2')) {
+      screen.classList.add('menu-2');
+    } else {
+      if (!screen.classList.contains('menu-3')) {
+        screen.classList.add('menu-3');
+      } else {
+        if (!screen.classList.contains('menu-4')) {
+          screen.classList.add('menu-4');
+        } else {
+          if (!screen.classList.contains('menu-5')) {
+            screen.classList.add('menu-5');
+          }
+        }
+      }
+    }
   }
 }
 
-function updateRight() {
-  if (thumb) {
-    var offsetX = -(rightJoy.x - mouse.x) / RANGE;
-    var offsetY = -(rightJoy.y - mouse.y) / RANGE;
-    var rotateY = offsetX * ROTATE_RANGE;
-    var rotateX = offsetY * -ROTATE_RANGE;
-    console.log('y:', rotateX, 'x:', rotateY);
-    rightJoystick.style.transform = "translateX(".concat(offsetX, "px) translateY(").concat(offsetY, "px) rotateY(").concat(rotateY, "deg) rotateX(").concat(rotateX, "deg) perspective(5000rem)");
-    updateJoy();
-  } else {
-    rightJoystick.style.transform = '';
-    rightJoy.x = RIGHT_ORIGIN_JOY.x;
-    rightJoy.y = RIGHT_ORIGIN_JOY.y;
+function moveLeft(screen) {
+  if (screen.classList.contains('opacity')) {
+    if (screen.classList.contains('menu-5')) {
+      screen.classList.remove('menu-5');
+    } else {
+      if (screen.classList.contains('menu-4')) {
+        screen.classList.remove('menu-4');
+      } else {
+        if (screen.classList.contains('menu-3')) {
+          screen.classList.remove('menu-3');
+        } else {
+          if (screen.classList.contains('menu-2')) {
+            screen.classList.remove('menu-2');
+          }
+        }
+      }
+    }
   }
 }
-},{}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+btnA.addEventListener('click', function (e) {
+  if (screen.classList.length === 2) {
+    playVideo(_Zelda.default);
+  }
+
+  if (screen.classList.length === 3) {
+    playVideo(_Mario.default);
+  }
+
+  if (screen.classList.length === 4) {
+    playVideo(_.default);
+  }
+
+  if (screen.classList.length === 5) {
+    playVideo(_Arms.default);
+  }
+
+  if (screen.classList.length === 6) {
+    playVideo(_Snipperclip.default);
+  }
+});
+btnB.addEventListener('click', function (e) {
+  video.classList.remove('active');
+  setTimeout(function () {
+    video.pause();
+    video.src = '';
+  }, 1000);
+});
+
+function playVideo(srcVideo) {
+  video.pause();
+  video.src = srcVideo;
+  video.load();
+  setTimeout(function () {
+    video.play();
+  }, 1000);
+  video.classList.add('active');
+}
+},{"./Joystick":"js/Joystick.js","../assets/video/Mario.mp4":"assets/video/Mario.mp4","../assets/video/Zelda.mp4":"assets/video/Zelda.mp4","../assets/video/1-2.mp4":"assets/video/1-2.mp4","../assets/video/Arms.mp4":"assets/video/Arms.mp4","../assets/video/Snipperclip.mp4":"assets/video/Snipperclip.mp4"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -254,7 +407,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44237" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45385" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
