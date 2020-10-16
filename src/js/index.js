@@ -5,7 +5,6 @@ import video12 from '../assets/video/1-2.mp4';
 import videoArms from '../assets/video/Arms.mp4';
 import videoSnipper from '../assets/video/Snipperclip.mp4';
 
-
 const leftJoystick = new Joystick(document.querySelector('.left-joycon .joystick'));
 const rightJoystick = new Joystick(document.querySelector('.right-joycon .joystick'));
 addEvents(leftJoystick, mouseMove);
@@ -17,6 +16,11 @@ const btnB = document.querySelector('.right-joycon .button-down');
 
 const screen = document.querySelector('.screen');
 const video = document.querySelector('.video');
+const audioRun = document.querySelector('.runAudio');
+const audioHome = document.querySelector('.homeAudio');
+const audioOn = document.querySelector('.onAudio');
+const audioOff = document.querySelector('.offAudio');
+
 
 const mouse = { x: 0, y: 0 };
 
@@ -48,6 +52,11 @@ function removeMouseMove (mouseMove, joystick) {
 }
 
 btnHome.addEventListener('click', (e) => {
+	if (!screen.classList.contains('opacity')) {
+		audioOn.play();
+	} else {
+		audioOff.play();
+	}
 	video.pause();
 	video.src = '';
 	screen.classList.toggle('opacity');
@@ -124,13 +133,15 @@ btnA.addEventListener('click', (e) => {
 
 btnB.addEventListener('click', (e) => {
 	video.classList.remove('active');
+	video.pause();
+	audioHome.play();
 	setTimeout(() => {
-		video.pause();
 		video.src = '';
 	}, 1000);
 });
 
 function playVideo (srcVideo) {
+	audioRun.play();
 	video.pause();
 	video.src = srcVideo;
 	video.load();
