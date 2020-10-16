@@ -20,7 +20,7 @@ const audioRun = document.querySelector('.runAudio');
 const audioHome = document.querySelector('.homeAudio');
 const audioOn = document.querySelector('.onAudio');
 const audioOff = document.querySelector('.offAudio');
-
+const audioChange = document.querySelector('.changeAudio');
 
 const mouse = { x: 0, y: 0 };
 
@@ -75,6 +75,7 @@ leftArrow.addEventListener('click', (e) => {
 
 function moveRight (screen) {
 	if (screen.classList.contains('opacity')) {
+		audioChange.play();
 		if (!screen.classList.contains('menu-2')) {
 			screen.classList.add('menu-2');
 		} else {
@@ -95,6 +96,7 @@ function moveRight (screen) {
 
 function moveLeft (screen) {
 	if (screen.classList.contains('opacity')) {
+		audioChange.play();
 		if (screen.classList.contains('menu-5')) {
 			screen.classList.remove('menu-5');
 		} else {
