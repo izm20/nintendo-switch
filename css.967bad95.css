@@ -163,7 +163,7 @@ body {
 	background-repeat: no-repeat;
 	background-size: cover;
 	opacity: 0;
-	transition: all 3s ease-in-out;
+	transition: all 1s ease-in-out;
 }
 
 .video {
@@ -185,7 +185,6 @@ body {
 
 .screen.opacity {
 	opacity: 1;
-	background-color: black;
 }
 
 .screen.menu-2 {

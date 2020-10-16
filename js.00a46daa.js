@@ -233,6 +233,10 @@ var btnA = document.querySelector('.right-joycon .button-right');
 var btnB = document.querySelector('.right-joycon .button-down');
 var screen = document.querySelector('.screen');
 var video = document.querySelector('.video');
+var audioRun = document.querySelector('.runAudio');
+var audioHome = document.querySelector('.homeAudio');
+var audioOn = document.querySelector('.onAudio');
+var audioOff = document.querySelector('.offAudio');
 var mouse = {
   x: 0,
   y: 0
@@ -287,6 +291,12 @@ function removeMouseMove(mouseMove, joystick) {
 }
 
 btnHome.addEventListener('click', function (e) {
+  if (!screen.classList.contains('opacity')) {
+    audioOn.play();
+  } else {
+    audioOff.play();
+  }
+
   video.pause();
   video.src = '';
   screen.classList.toggle('opacity');
@@ -364,13 +374,15 @@ btnA.addEventListener('click', function (e) {
 });
 btnB.addEventListener('click', function (e) {
   video.classList.remove('active');
+  video.pause();
+  audioHome.play();
   setTimeout(function () {
-    video.pause();
     video.src = '';
   }, 1000);
 });
 
 function playVideo(srcVideo) {
+  audioRun.play();
   video.pause();
   video.src = srcVideo;
   video.load();
@@ -407,7 +419,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45385" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44415" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
