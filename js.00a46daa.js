@@ -237,6 +237,7 @@ var audioRun = document.querySelector('.runAudio');
 var audioHome = document.querySelector('.homeAudio');
 var audioOn = document.querySelector('.onAudio');
 var audioOff = document.querySelector('.offAudio');
+var audioChange = document.querySelector('.changeAudio');
 var mouse = {
   x: 0,
   y: 0
@@ -313,6 +314,8 @@ leftArrow.addEventListener('click', function (e) {
 
 function moveRight(screen) {
   if (screen.classList.contains('opacity')) {
+    audioChange.play();
+
     if (!screen.classList.contains('menu-2')) {
       screen.classList.add('menu-2');
     } else {
@@ -333,6 +336,8 @@ function moveRight(screen) {
 
 function moveLeft(screen) {
   if (screen.classList.contains('opacity')) {
+    audioChange.play();
+
     if (screen.classList.contains('menu-5')) {
       screen.classList.remove('menu-5');
     } else {
@@ -419,7 +424,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44415" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39277" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
