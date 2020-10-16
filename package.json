@@ -25,5 +25,10 @@
     "sass": "^1.27.0",
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "babel-polyfill": "^6.26.0"
   }
 }
